@@ -10,12 +10,14 @@ class MemberSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::where('role', 'member')->first();
+        $members = User::where('role', 'member')->get();
 
-        Member::create([
-            'user_id' => $user->id,
-            'datum_uclanjenja' => now(),
-            'status' => 'aktivno',
-        ]);
+        foreach ($members as $user) {
+            Member::create([
+                'user_id' => $user->id,
+                'datum_uclanjenja' => now(),
+                'status' => 'aktivno',
+            ]);
+        }
     }
 }

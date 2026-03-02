@@ -14,6 +14,10 @@ class DatabaseSeeder extends Seeder
             TrainerSeeder::class,
             PackageSeeder::class,
             MembershipSeeder::class,
+            TrainingSlotSeeder::class,
+            GroupTrainingSeeder::class,
+            RegistrationSeeder::class,
+            BodyProgressSeeder::class,
         ]);
     }
 }

@@ -12,21 +12,35 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@test.com',
+            'email' => 'admin@gym.rs',
             'password' => Hash::make('password'),
             'role' => 'admin',
         ]);
 
         User::create([
-            'name' => 'Trainer',
-            'email' => 'trainer@test.com',
+            'name' => 'Nikola Jovanović',
+            'email' => 'nikola.trener@gmail.rs',
             'password' => Hash::make('password'),
             'role' => 'trainer',
         ]);
 
         User::create([
-            'name' => 'Member',
-            'email' => 'member@test.com',
+            'name' => 'Ivana Stanković',
+            'email' => 'ivana.trener@gmail.rs',
+            'password' => Hash::make('password'),
+            'role' => 'trainer',
+        ]);
+
+        User::create([
+            'name' => 'Luka Milenković',
+            'email' => 'luka.member@gmail.rs',
+            'password' => Hash::make('password'),
+            'role' => 'member',
+        ]);
+
+        User::create([
+            'name' => 'Milica Đorđević',
+            'email' => 'milica.member@gmail.rs',
             'password' => Hash::make('password'),
             'role' => 'member',
         ]);

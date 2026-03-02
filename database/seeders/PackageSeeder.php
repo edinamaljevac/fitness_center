@@ -9,13 +9,22 @@ class PackageSeeder extends Seeder
 {
     public function run(): void
     {
-        $package = Package::create([
+        Package::create([
             'naziv' => 'Mesečni paket',
-            'opis' => 'Osnovni mesečni paket',
+            'opis' => 'Neograničen pristup teretani',
             'cena' => 3000,
             'trajanje_dana' => 30,
             'aktivan' => true,
             'tip' => 'M',
+        ]);
+
+        Package::create([
+            'naziv' => 'Personal 8',
+            'opis' => '8 personalnih treninga mesečno',
+            'cena' => 12000,
+            'trajanje_dana' => 30,
+            'aktivan' => true,
+            'tip' => 'T',
         ]);
     }
 }
