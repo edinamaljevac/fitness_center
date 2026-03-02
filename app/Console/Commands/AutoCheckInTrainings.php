@@ -10,78 +10,64 @@ use Carbon\Carbon;
 class AutoCheckInTrainings extends Command
 {
     protected $signature = 'trainings:auto-checkin';
-
     protected $description = 'Automatski check-in i zatvaranje treninga';
 
     public function handle()
     {
-        $now = Carbon::now();
+        try {
 
-        // Uzimamo samo današnje treninge
-        $trainings = Training::whereDate('datum', $now->toDateString())
-            ->get();
+            $now = Carbon::now();
 
-        foreach ($trainings as $training) {
+            $trainings = Training::whereDate('datum', $now->toDateString())->get();
 
-            $start = $training->datum
-                ->copy()
-                ->setTimeFromTimeString($training->vreme_pocetka);
+            foreach ($trainings as $training) {
 
-            $end = $start->copy()
-                ->addMinutes($training->trajanje_min);
+                $start = Carbon::parse($training->datum . ' ' . $training->vreme_pocetka);
+                $end   = $start->copy()->addMinutes($training->trajanje_min);
 
-            /*
-            |--------------------------------------------------------------------------
-            | 1️⃣ AUTOMATSKI CHECK-IN
-            |--------------------------------------------------------------------------
-            */
-            if ($now->greaterThanOrEqualTo($start)) {
+                // CHECK-IN
+                if ($now->greaterThanOrEqualTo($start)) {
 
-                $already = Attendance::where('member_id', $training->member_id)
-                    ->whereDate('datum', $training->datum)
-                    ->exists();
+                    $already = Attendance::where('member_id', $training->member_id)
+                        ->whereDate('datum', $training->datum)
+                        ->exists();
 
-                if (!$already) {
+                    if (!$already) {
+                        Attendance::create([
+                            'member_id'     => $training->member_id,
+                            'datum'         => $training->datum,
+                            'vreme_ulaska'  => $training->vreme_pocetka,
+                            'vreme_izlaska' => null,
+                        ]);
+                    }
+                }
 
-                    Attendance::create([
-                        'member_id'     => $training->member_id,
-                        'datum'         => $training->datum,
-                        'vreme_ulaska'  => $training->vreme_pocetka,
-                        'vreme_izlaska' => null,
+                // CHECK-OUT + CLOSE
+                if ($now->greaterThanOrEqualTo($end) && !$training->zavrsen) {
+
+                    $attendance = Attendance::where('member_id', $training->member_id)
+                        ->whereDate('datum', $training->datum)
+                        ->first();
+
+                    if ($attendance && is_null($attendance->vreme_izlaska)) {
+                        $attendance->update([
+                            'vreme_izlaska' => $end->format('H:i:s'),
+                        ]);
+                    }
+
+                    $training->update([
+                        'zavrsen' => true
                     ]);
-
-                    $this->info('Check-in dodat za trening ID: ' . $training->id);
                 }
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | 2️⃣ AUTOMATSKI CHECK-OUT + ZATVARANJE
-            |--------------------------------------------------------------------------
-            */
-            if ($now->greaterThanOrEqualTo($end) && !$training->zavrsen) {
+            return 0;
 
-                $attendance = Attendance::where('member_id', $training->member_id)
-                    ->whereDate('datum', $training->datum)
-                    ->first();
+        } catch (\Throwable $e) {
 
-                if ($attendance && is_null($attendance->vreme_izlaska)) {
+            \Illuminate\Support\Facades\Log::error('Auto check-in error: ' . $e->getMessage());
 
-                    $attendance->update([
-                        'vreme_izlaska' => $end->format('H:i:s'),
-                    ]);
-
-                    $this->info('Check-out dodat za trening ID: ' . $training->id);
-                }
-
-                $training->update([
-                    'zavrsen' => true
-                ]);
-
-                $this->info('Trening zatvoren ID: ' . $training->id);
-            }
+            return 1;
         }
-
-        return 0;
     }
 }
