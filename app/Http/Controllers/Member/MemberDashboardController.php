@@ -71,7 +71,13 @@ class MemberDashboardController extends Controller
         $member = Auth::user()->member;
 
         $groups = GroupTraining::with('trainer')
-            ->where('vreme_pocetka', '>', now())
+            ->where(function ($query) {
+                $query->where('datum', '>', now()->toDateString())
+                    ->orWhere(function ($q) {
+                        $q->where('datum', now()->toDateString())
+                            ->where('vreme_pocetka', '>', now()->format('H:i:s'));
+                    });
+            })
             ->whereDoesntHave('registrations', function ($q) use ($member) {
                 $q->where('member_id', $member->id)
                 ->where('status', 'approved');
