@@ -10,7 +10,6 @@
     Pregled vašeg članstva, uplata i aktivnosti
 </p>
 
-<!-- STATISTIKA DOLAZAKA -->
 <div class="row g-4 mb-5">
 
     <div class="col-md-4">
@@ -53,7 +52,6 @@
 
 <div class="row g-4">
 
-    <!-- AKTIVNO ČLANSTVO -->
     <div class="col-md-6">
         <div class="card p-4">
             <p class="card-title mb-2">Aktivno članstvo</p>
@@ -79,7 +77,6 @@
         </div>
     </div>
 
-    <!-- STATUS NALOGA -->
     <div class="col-md-6">
         <div class="card p-4">
             <p class="card-title mb-2">Status naloga</p>
@@ -96,7 +93,6 @@
 
 </div>
 
-<!-- ISTORIJA UPLATA -->
 <div class="row mt-5">
     <div class="col-12">
         <div class="card p-4">

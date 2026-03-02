@@ -11,7 +11,6 @@
     <form method="POST" action="{{ route('admin.payments.store') }}">
         @csrf
 
-        <!-- ČLANSTVO -->
         <div class="mb-4">
             <label class="form-label fw-semibold">
                 Članstvo (član + paket)
@@ -38,7 +37,6 @@
             </small>
         </div>
 
-        <!-- IZNOS -->
         <div class="mb-4">
             <label class="form-label fw-semibold">
                 Iznos (RSD)
@@ -50,7 +48,6 @@
                    required>
         </div>
 
-        <!-- NAČIN PLAĆANJA -->
         <div class="mb-4">
             <label class="form-label fw-semibold">
                 Način plaćanja
@@ -65,7 +62,6 @@
             </select>
         </div>
 
-        <!-- BROJ RAČUNA -->
         <div class="mb-4">
             <label class="form-label fw-semibold">
                 Broj računa (opciono)
@@ -75,7 +71,6 @@
                    class="form-control bg-dark text-white border-secondary">
         </div>
 
-        <!-- NAPOMENA -->
         <div class="mb-4">
             <label class="form-label fw-semibold">
                 Napomena
@@ -85,7 +80,6 @@
                       class="form-control bg-dark text-white border-secondary"></textarea>
         </div>
 
-        <!-- ACTIONS -->
         <div class="d-flex justify-content-between mt-4">
             <a href="{{ route('admin.payments.index') }}"
                class="btn btn-outline-light">

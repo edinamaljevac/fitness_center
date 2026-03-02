@@ -55,7 +55,6 @@
 
 <div class="card form-card p-4 mb-4">
 
-    <!-- DATUM -->
     <div class="mb-4">
         <label class="form-label">Datum merenja</label>
         <input type="date"
@@ -64,7 +63,6 @@
                required>
     </div>
 
-    <!-- PRVI RED -->
     <div class="row">
 
         <div class="col-md-4 mb-4">
@@ -93,7 +91,6 @@
 
     </div>
 
-    <!-- DRUGI RED -->
     <div class="row">
 
         <div class="col-md-6 mb-4">

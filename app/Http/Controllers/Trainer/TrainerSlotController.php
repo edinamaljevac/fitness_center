@@ -25,11 +25,9 @@ class TrainerSlotController extends Controller
 
         $trainer = Auth::user()->trainer;
 
-        // Kreiranje početka termina
         $newStart = Carbon::parse($request->datum)
             ->setTimeFromTimeString($request->vreme_pocetka);
 
-        // Ne dozvoli termin u prošlosti
         if ($newStart->isPast()) {
             return back()
                 ->withInput()
@@ -39,7 +37,6 @@ class TrainerSlotController extends Controller
         $newEnd = $newStart->copy()
             ->addMinutes((int)$request->trajanje_min);
 
-        // Provera preklapanja
         $existingSlots = TrainingSlot::where('trainer_id', $trainer->id)
             ->whereDate('datum', $request->datum)
             ->get();
@@ -63,7 +60,6 @@ class TrainerSlotController extends Controller
             }
         }
 
-        // Čuvanje termina
         TrainingSlot::create([
             'trainer_id'    => $trainer->id,
             'datum'         => $request->datum,
@@ -98,7 +94,6 @@ class TrainerSlotController extends Controller
             $end = $start->copy()
                 ->addMinutes((int)$slot->trajanje_min);
 
-            // Ako je termin prošao i još je otvoren → zatvori ga
             if ($end->isPast() && $slot->status === 'open') {
                 $slot->update([
                     'status' => 'closed'

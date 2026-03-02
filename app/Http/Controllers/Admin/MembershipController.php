@@ -43,7 +43,6 @@ class MembershipController extends Controller
         $start = Carbon::parse($request->datum_pocetka)->startOfDay();
         $end = $start->copy()->addDays((int)$package->trajanje_dana);
 
-        // ✅ aktivno samo ako je start <= danas
         $isActiveNow = $start->lte(Carbon::today());
 
         Membership::create([
@@ -57,7 +56,6 @@ class MembershipController extends Controller
             'aktivno' => $isActiveNow,
         ]);
 
-        // ✅ status člana menjamo samo ako članstvo važi odmah
         if ($isActiveNow) {
             Member::where('id', $request->member_id)
                 ->update(['status' => 'aktivno']);

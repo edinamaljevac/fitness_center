@@ -49,7 +49,6 @@ class PaymentController extends Controller
             'napomena' => $request->napomena,
         ]);
 
-        // ⭐ osiguravamo da je članstvo aktivno
         if (! $membership->aktivno) {
             $membership->update(['aktivno' => true]);
         }

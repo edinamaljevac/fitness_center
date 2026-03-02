@@ -8,9 +8,6 @@ use Carbon\Carbon;
 
 class AttendanceService
 {
-    /**
-     * Evidentira ulazak člana
-     */
     public function checkIn(Member $member): Attendance
     {
         return Attendance::create([
@@ -21,9 +18,6 @@ class AttendanceService
         ]);
     }
 
-    /**
-     * Evidentira izlazak člana
-     */
     public function checkOut(Attendance $attendance): Attendance
     {
         $attendance->update([
@@ -33,9 +27,6 @@ class AttendanceService
         return $attendance;
     }
 
-    /**
-     * Proverava da li je član već prijavljen danas
-     */
     public function alreadyCheckedInToday(Member $member): bool
     {
         return Attendance::where('member_id', $member->id)

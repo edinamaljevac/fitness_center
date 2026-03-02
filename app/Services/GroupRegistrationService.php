@@ -11,7 +11,6 @@ class GroupRegistrationService
 {
     public function createRegistration(GroupTraining $group, $member)
     {
-        // 🔥 vreme_pocetka već sadrži datum + vreme
         $start = Carbon::parse($group->vreme_pocetka);
 
         if ($start->isPast()) {
@@ -54,7 +53,6 @@ class GroupRegistrationService
             'status' => 'approved'
         ]);
 
-        // 🔥 koristi pravi datum grupnog treninga
         Training::create([
             'member_id'      => $registration->member_id,
             'trainer_id'     => $group->trainer_id,

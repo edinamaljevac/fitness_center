@@ -12,7 +12,6 @@ class ExerciseController extends Controller
     {
         $query = Exercise::query();
 
-        // Opcioni filteri
         if ($request->filled('kategorija')) {
             $query->where('kategorija', 'like', '%' . $request->kategorija . '%');
         }
@@ -80,9 +79,6 @@ class ExerciseController extends Controller
 
     public function destroy(Exercise $exercise)
     {
-        // Ako je vežba već korišćena u treninzima, pivot bi mogao da blokira brisanje.
-        // U tom slučaju umesto delete možeš "soft delete" ili detach.
-        // Za sada: detach pa delete (sigurno).
         $exercise->trainings()->detach();
         $exercise->delete();
 

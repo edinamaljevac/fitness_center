@@ -8,7 +8,6 @@
 
 <div class="row g-4">
 
-    <!-- OSNOVNI PODACI -->
     <div class="col-md-6">
         <div class="card p-4 h-100">
             <h5 class="mb-3" style="color: var(--orange);">
@@ -38,7 +37,6 @@
         </div>
     </div>
 
-    <!-- PROMENA STATUSA -->
     <div class="col-md-6">
         <div class="card p-4 h-100">
             <h5 class="mb-3" style="color: var(--orange);">
@@ -78,7 +76,6 @@
 
 </div>
 
-<!-- ČLANSTVA -->
 <div class="card p-4 mt-4">
     <h5 class="mb-3" style="color: var(--orange);">
         Članstva

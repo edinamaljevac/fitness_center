@@ -28,7 +28,6 @@ class TrainerTrainingController extends Controller
     {
         $trainer = Auth::user()->trainer;
 
-        // Security: trener može editovati samo svoje treninge
         if ((int)$training->trainer_id !== (int)$trainer->id) {
             abort(403);
         }
@@ -36,19 +35,16 @@ class TrainerTrainingController extends Controller
         $trainingDateTime = Carbon::parse($training->datum)
         ->setTimeFromTimeString($training->vreme_pocetka);
 
-    // ❌ Ako je u budućnosti
         if ($trainingDateTime->isFuture()) {
             return redirect()
                 ->route('trainer.trainings.index')
                 ->with('error', 'Vežbe možete uneti tek nakon održanog treninga.');
         }
 
-        // Lock: prošli treninzi su read-only
         $locked = Carbon::parse($training->datum)->lt(Carbon::today());
 
         $exercises = Exercise::orderBy('naziv')->get();
 
-        // Postojeće vežbe sa pivotom (za edit)
         $training->load('exercises');
 
         return view('trainer.trainings.edit', compact('training', 'exercises', 'locked'));
@@ -62,7 +58,6 @@ class TrainerTrainingController extends Controller
             abort(403);
         }
 
-        // Lock: ne dozvoli izmene za prošle treninge
         if (Carbon::parse($training->datum)->lt(Carbon::today())) {
             return back()->with('error', 'Ne možete menjati trening koji je već prošao.');
         }
@@ -87,7 +82,6 @@ class TrainerTrainingController extends Controller
 
         $items = $validated['items'] ?? [];
 
-        // Ako korisnik obriše sve redove => obriši sve pivot veze
         if (count($items) === 0) {
             $training->exercises()->sync([]);
             return redirect()
@@ -95,7 +89,6 @@ class TrainerTrainingController extends Controller
                 ->with('success', 'Trening je ažuriran (obrisane su sve vežbe).');
         }
 
-        // Priprema za sync: [exercise_id => pivot_data]
         $syncData = [];
 
         foreach ($items as $row) {

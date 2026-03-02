@@ -12,7 +12,6 @@ class RegistrationController extends Controller
     {
         $member = Auth::user()->member;
 
-        // Provera da li je već prijavljen
         if ($group->registrations()
             ->where('member_id', $member->id)
             ->exists()) {
@@ -20,7 +19,6 @@ class RegistrationController extends Controller
             return back()->with('error', 'Već ste prijavljeni na ovaj trening.');
         }
 
-        // Provera popunjenosti
         if ($group->registrations()
             ->where('status', 'approved')
             ->count() >= $group->max_ucesnika) {

@@ -53,15 +53,12 @@ class TrainerGroupTrainingController extends Controller
 
         $today = Carbon::today();
 
-        // Uzimamo sledeći taj dan u nedelji
         $datum = $today->copy()->next($targetDay);
 
-        // Ako je danas taj dan → pomeri za sledeću nedelju
         if ($today->dayOfWeek == $targetDay) {
             $datum = $today->copy()->addWeek();
         }
 
-        // 🔥 Profesionalna provera kombinacije datum + vreme
         $startDateTime = Carbon::parse(
             $datum->format('Y-m-d') . ' ' . $request->vreme_pocetka
         );

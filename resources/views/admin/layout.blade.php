@@ -205,7 +205,6 @@ h2, h5 {
                 </script>
             @endif
 
-            <!-- ERROR MESSAGE -->
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">

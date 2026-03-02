@@ -13,20 +13,16 @@ class TrainerDashboardController extends Controller
     {
         $trainer = Auth::user()->trainer;
 
-        // Bazni query
         $baseQuery = Training::where('trainer_id', $trainer->id);
 
-        // Aktivni klijenti
         $activeClients = (clone $baseQuery)
             ->distinct('member_id')
             ->count('member_id');
 
-        // Današnji treninzi
         $todayTrainings = (clone $baseQuery)
             ->whereDate('datum', Carbon::today())
             ->count();
 
-        // Treninzi ove nedelje
         $weekTrainings = (clone $baseQuery)
             ->whereBetween('datum', [
                 Carbon::now()->startOfWeek(),
@@ -35,7 +31,6 @@ class TrainerDashboardController extends Controller
             ->count();
 
         $now = Carbon::now();
-        // Sledeći trening
         $nextTraining = (clone $baseQuery)
             ->get()
             ->filter(function ($training) use ($now) {
@@ -50,7 +45,6 @@ class TrainerDashboardController extends Controller
             })
             ->first();
             
-        // Prosečna ocena
         $averageRating = (clone $baseQuery)
             ->whereNotNull('ocena')
             ->avg('ocena');

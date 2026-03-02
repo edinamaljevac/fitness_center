@@ -17,11 +17,6 @@ class AdminReportsController extends Controller
     {
         $today = Carbon::today();
 
-        /*
-        |--------------------------------------------------------------------------
-        | PRIHOD
-        |--------------------------------------------------------------------------
-        */
 
         $totalRevenue = Payment::sum('iznos');
 
@@ -30,11 +25,6 @@ class AdminReportsController extends Controller
             ->sum('iznos');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | ČLANOVI
-        |--------------------------------------------------------------------------
-        */
 
         $activeMembers = Membership::where('aktivno', true)
             ->whereDate('datum_zavrsetka', '>=', $today)
@@ -49,11 +39,6 @@ class AdminReportsController extends Controller
             ->pluck('total', 'month');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | DOLASCI
-        |--------------------------------------------------------------------------
-        */
 
         $totalAttendances = Attendance::count();
 
@@ -66,11 +51,6 @@ class AdminReportsController extends Controller
             : 0;
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | RAD TRENERA
-        |--------------------------------------------------------------------------
-        */
 
         $trainersStats = Trainer::withCount('trainings')
             ->withAvg('trainings as avg_rating', 'ocena')
