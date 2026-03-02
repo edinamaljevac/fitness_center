@@ -24,23 +24,5 @@ class Package extends Model
         return $this->hasMany(Membership::class);
     }
 
-    public function monthlyPackage()
-    {
-        return $this->hasOne(MonthlyPackage::class);
-    }
-
-    public function yearlyPackage()
-    {
-        return $this->hasOne(YearlyPackage::class);
-    }
-
-    public function dailyPackage()
-    {
-        return $this->hasOne(DailyPackage::class);
-    }
-
-    public function trainerPackage()
-    {
-        return $this->hasOne(TrainerPackage::class);
-    }
+    
 }

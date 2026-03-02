@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Package;
-use App\Models\MonthlyPackage;
 
 class PackageSeeder extends Seeder
 {
@@ -17,12 +16,6 @@ class PackageSeeder extends Seeder
             'trajanje_dana' => 30,
             'aktivan' => true,
             'tip' => 'M',
-        ]);
-
-        MonthlyPackage::create([
-            'package_id' => $package->id,
-            'broj_dolazaka' => 20,
-            'ukljucuje_grupne' => true,
         ]);
     }
 }

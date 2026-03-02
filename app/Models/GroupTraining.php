@@ -32,8 +32,5 @@ class GroupTraining extends Model
         return $this->hasMany(Registration::class);
     }
 
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class);
-    }
+    
 }
