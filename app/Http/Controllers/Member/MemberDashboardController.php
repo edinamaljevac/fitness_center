@@ -69,19 +69,14 @@ class MemberDashboardController extends Controller
     public function groupTrainings()
     {
         $member = Auth::user()->member;
-        $now = Carbon::now();
 
         $groups = GroupTraining::with('trainer')
+            ->where('vreme_pocetka', '>', now())
             ->whereDoesntHave('registrations', function ($q) use ($member) {
                 $q->where('member_id', $member->id)
                 ->where('status', 'approved');
             })
-            ->get()
-            ->filter(function ($group) use ($now) {
-                // 🔥 vreme_pocetka već sadrži datum + vreme
-                $start = Carbon::parse($group->vreme_pocetka);
-                return $start->isFuture();
-            });
+            ->get();
 
         $registrations = Registration::where('member_id', $member->id)
             ->whereIn('group_training_id', $groups->pluck('id'))
