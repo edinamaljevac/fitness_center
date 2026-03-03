@@ -44,6 +44,8 @@ class MemberDashboardController extends Controller
                 return Carbon::parse($attendance->vreme_ulaska)
                     ->diffInMinutes($attendance->vreme_izlaska);
             });
+        
+        $totalMinutes = round($totalMinutes, 2);
 
         return view('member.dashboard', compact(
             'member',
