@@ -9,12 +9,7 @@
     </a>
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
-@if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-@endif
+
 
 <div class="card p-3 mb-4">
     <form method="GET" action="{{ route('admin.exercises.index') }}" class="row g-2">
