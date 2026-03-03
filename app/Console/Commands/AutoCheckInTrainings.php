@@ -13,43 +13,41 @@ class AutoCheckInTrainings extends Command
     protected $description = 'Automatski check-in i zatvaranje treninga';
 
     public function handle()
-    {
-        try {
+{
+    try {
 
-            $now = Carbon::now();
+        $now = Carbon::now();
 
-            $trainings = Training::whereDate('datum', $now->toDateString())->get();
+        $trainings = Training::whereDate('datum', $now->toDateString())
+            ->where('zavrsen', false)
+            ->get();
 
-            foreach ($trainings as $training) {
+        foreach ($trainings as $training) {
 
-                $start = Carbon::parse($training->datum . ' ' . $training->vreme_pocetka);
-                $end   = $start->copy()->addMinutes($training->trajanje_min);
+            $start = Carbon::parse($training->datum)
+                ->setTimeFromTimeString($training->vreme_pocetka);
 
-                // CHECK-IN
-                if ($now->greaterThanOrEqualTo($start)) {
+            $end = $start->copy()->addMinutes($training->trajanje_min);
 
-                    $already = Attendance::where('member_id', $training->member_id)
-                        ->whereDate('datum', $training->datum)
-                        ->exists();
+            if ($now->greaterThanOrEqualTo($start)) {
 
-                    if (!$already) {
-                        Attendance::create([
-                            'member_id'     => $training->member_id,
-                            'datum'         => $training->datum,
-                            'vreme_ulaska'  => $training->vreme_pocetka,
-                            'vreme_izlaska' => null,
-                        ]);
-                    }
+                $attendance = Attendance::where('member_id', $training->member_id)
+                    ->where('datum', $training->datum)
+                    ->where('vreme_ulaska', $training->vreme_pocetka)
+                    ->first();
+
+                if (!$attendance) {
+                    $attendance = Attendance::create([
+                        'member_id'     => $training->member_id,
+                        'datum'         => $training->datum,
+                        'vreme_ulaska'  => $training->vreme_pocetka,
+                        'vreme_izlaska' => null,
+                    ]);
                 }
 
-                // CHECK-OUT + CLOSE
-                if ($now->greaterThanOrEqualTo($end) && !$training->zavrsen) {
+                if ($now->greaterThanOrEqualTo($end)) {
 
-                    $attendance = Attendance::where('member_id', $training->member_id)
-                        ->whereDate('datum', $training->datum)
-                        ->first();
-
-                    if ($attendance && is_null($attendance->vreme_izlaska)) {
+                    if (is_null($attendance->vreme_izlaska)) {
                         $attendance->update([
                             'vreme_izlaska' => $end->format('H:i:s'),
                         ]);
@@ -60,14 +58,15 @@ class AutoCheckInTrainings extends Command
                     ]);
                 }
             }
-
-            return 0;
-
-        } catch (\Throwable $e) {
-
-            \Illuminate\Support\Facades\Log::error('Auto check-in error: ' . $e->getMessage());
-
-            return 1;
         }
+
+        return 0;
+
+    } catch (\Throwable $e) {
+
+        \Illuminate\Support\Facades\Log::error('Auto check-in error: ' . $e->getMessage());
+
+        return 1;
     }
+}
 }
