@@ -1,0 +1,49 @@
+<div class="page">
+  <div class="card">
+    <a routerLink="/payments" class="back">← Nazad na uplate</a>
+
+    <h1>Detalji uplate</h1>
+
+    <div *ngIf="loading">Učitavanje...</div>
+
+    <div class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!loading && payment">
+      <div class="section">
+        <h2>Podaci o članu</h2>
+        <p>
+          <strong>Ime:</strong> {{ payment.membership?.member?.user?.name }}
+        </p>
+        <p>
+          <strong>Email:</strong> {{ payment.membership?.member?.user?.email }}
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Članstvo</h2>
+        <p><strong>Paket:</strong> {{ payment.membership?.package?.naziv }}</p>
+        <p>
+          <strong>Status članstva:</strong>
+          {{ payment.membership?.aktivno ? "Aktivno" : "Neaktivno" }}
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Uplata</h2>
+        <p><strong>Iznos:</strong> {{ payment.iznos }} din</p>
+        <p><strong>Način plaćanja:</strong> {{ payment.nacin_placanja }}</p>
+        <p><strong>Status:</strong> {{ payment.status }}</p>
+        <p>
+          <strong>Broj računa:</strong>
+          {{ payment.broj_racuna || "Nije unesen" }}
+        </p>
+        <p><strong>Datum:</strong> {{ payment.datum | date: "dd.MM.yyyy" }}</p>
+        <p>
+          <strong>Napomena:</strong> {{ payment.napomena || "Nema napomene" }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

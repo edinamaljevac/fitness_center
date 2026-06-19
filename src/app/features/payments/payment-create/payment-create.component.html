@@ -1,0 +1,105 @@
+<div class="page">
+  <div class="card">
+    <div class="header">
+      <div>
+        <h1>Nova uplata</h1>
+        <p>Evidentiranje nove uplate za aktivno članstvo.</p>
+      </div>
+
+      <a routerLink="/payments" class="back">Nazad</a>
+    </div>
+
+    <div *ngIf="loading">Učitavanje članstava...</div>
+
+    <div class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form *ngIf="!loading" [formGroup]="paymentForm" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label>Članstvo</label>
+
+        <select formControlName="membership_id">
+          <option value="">Izaberite članstvo</option>
+
+          <option
+            *ngFor="let membership of memberships"
+            [value]="membership.id"
+          >
+            {{ membership.member?.user?.name }}
+            -
+            {{ membership.package?.naziv }}
+          </option>
+        </select>
+
+        <small
+          *ngIf="
+            paymentForm.get('membership_id')?.touched &&
+            paymentForm.get('membership_id')?.hasError('required')
+          "
+        >
+          Članstvo je obavezno.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Iznos</label>
+        <input
+          type="number"
+          formControlName="iznos"
+          placeholder="Unesite iznos"
+        />
+
+        <small
+          *ngIf="
+            paymentForm.get('iznos')?.touched &&
+            paymentForm.get('iznos')?.hasError('required')
+          "
+        >
+          Iznos je obavezan.
+        </small>
+
+        <small
+          *ngIf="
+            paymentForm.get('iznos')?.touched &&
+            paymentForm.get('iznos')?.hasError('min')
+          "
+        >
+          Iznos mora biti veći od 0.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Način plaćanja</label>
+
+        <select formControlName="nacin_placanja">
+          <option value="gotovina">Gotovina</option>
+          <option value="kartica">Kartica</option>
+          <option value="transfer">Bankovni transfer</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Broj računa</label>
+        <input
+          type="text"
+          formControlName="broj_racuna"
+          placeholder="Opcionalno"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Napomena</label>
+        <textarea
+          rows="4"
+          formControlName="napomena"
+          placeholder="Opcionalna napomena"
+        ></textarea>
+      </div>
+
+      <button type="submit" [disabled]="saving">
+        {{ saving ? "Čuvanje..." : "Sačuvaj uplatu" }}
+      </button>
+    </form>
+  </div>
+</div>

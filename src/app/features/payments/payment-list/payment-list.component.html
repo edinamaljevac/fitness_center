@@ -1,0 +1,94 @@
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>Uplate</h1>
+      <p>Pregled, pretraga i evidencija uplata članova</p>
+    </div>
+
+    <div class="actions">
+      <a routerLink="/payments/create" class="btn">Nova uplata</a>
+      <button type="button" class="btn logout" (click)="logout()">
+        Odjava
+      </button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <span>Broj uplata</span>
+      <strong>{{ totalPayments }}</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Ukupan iznos</span>
+      <strong>{{ totalAmount }} DIN</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Zadnja uplata</span>
+      <strong>
+        {{
+          lastPayment ? (lastPayment.datum | date: "dd.MM.yyyy") : "Nema uplata"
+        }}
+      </strong>
+    </div>
+  </div>
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Pretraži po imenu ili emailu člana..."
+      [(ngModel)]="search"
+      (keyup.enter)="searchPayments()"
+    />
+
+    <button type="button" class="btn" (click)="searchPayments()">
+      Pretraži
+    </button>
+    <button type="button" class="btn secondary" (click)="resetSearch()">
+      Resetuj
+    </button>
+  </div>
+
+  <div *ngIf="loading">Učitavanje uplata...</div>
+
+  <div class="error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <table *ngIf="!loading && payments.length > 0">
+    <thead>
+      <tr>
+        <th>Član</th>
+        <th>Paket</th>
+        <th>Iznos</th>
+        <th>Način plaćanja</th>
+        <th>Status</th>
+        <th>Datum</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let payment of payments">
+        <td>{{ payment.membership?.member?.user?.name || "N/A" }}</td>
+        <td>{{ payment.membership?.package?.naziv || "N/A" }}</td>
+        <td>{{ payment.iznos }} din</td>
+        <td>{{ payment.nacin_placanja }}</td>
+        <td>
+          <span class="status">{{ payment.status }}</span>
+        </td>
+        <td>{{ payment.datum | date: "dd.MM.yyyy" }}</td>
+        <td>
+          <a [routerLink]="['/payments', payment.id]" class="details-btn">
+            Detalji
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && payments.length === 0">
+    Nema uplata za zadatu pretragu.
+  </p>
+</div>
